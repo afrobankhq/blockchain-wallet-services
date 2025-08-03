@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",                      // Modern syntax support
+    "module": "CommonJS",                    // Required for Node.js backend
+    "moduleResolution": "node",
+    "lib": ["ES2020"],
+    "outDir": "dist",                        // Compiled output directory
+    "rootDir": "src",                        // Source directory
+    "esModuleInterop": true,                 // Required for `import express from 'express'`
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,               // Allows importing .json files
+    "noImplicitAny": false,                  // You allow implicit any
+    "allowJs": false                         // OPTIONAL: Better to keep it false if you're using only TS
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

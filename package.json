@@ -1,0 +1,38 @@
+{
+  "name": "afrobank-wallet-services",
+  "version": "1.0.0",
+  "description": "This is the repo for Afro Bank Wallet Services, an API for creating abstracted wallet addresses",
+  "main": "index.ts",
+  "scripts": {
+    "start": "node dist/api/index.js",
+    "dev": "ts-node-dev --respawn src/api/index.ts",
+    "build": "tsc && shx mkdir -p api && shx cp dist/api/index.js api/index.js && shx cp -r dist/config api/config && shx cp -r dist/routes api/routes"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afrobankhq/blockchain-wallet-services.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/afrobankhq/blockchain-wallet-services/issues"
+  },
+  "homepage": "https://github.com/afrobankhq/blockchain-wallet-services#readme",
+  "dependencies": {
+    "axios": "^1.10.0",
+    "body-parser": "^2.2.0",
+    "dotenv": "^17.2.0",
+    "ethers": "^6.15.0",
+    "express": "^5.1.0",
+    "firebase-admin": "^13.4.0",
+    "ioredis": "^5.6.1",
+    "serverless-http": "^3.2.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.0.15",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  }
+}
