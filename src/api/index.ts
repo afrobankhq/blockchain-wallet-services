@@ -44,8 +44,16 @@ app.get('/', (req, res) => {
 });
 
 // Connect to databases
-connectFirebase();
-connectRedis();
+(async () => {
+  try {
+    await connectFirebase();
+    await connectRedis();
+    console.log('✅ All database connections established');
+  } catch (error) {
+    console.error('❌ Database connection error:', error);
+    process.exit(1);
+  }
+})();
 
 // New tool handler routes
 app.post('/tools/create_master_wallet', createMasterWallet);

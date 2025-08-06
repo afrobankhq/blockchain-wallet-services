@@ -79,13 +79,18 @@ export const updateAddressSettings = async (req: Request, res: Response) => {
     // Update the address settings
     const updatedAddress = await dedicatedAddressService.update(address, updates);
 
+    // Check if update was successful
+    if (!updatedAddress) {
+      return res.status(500).json({ error: 'Failed to update address settings' });
+    }
+
     res.json({
       success: true,
       data: {
-        address: updatedAddress.address,
+        address: updatedAddress.id || address,
         network,
         updated: updates,
-        updatedAt: updatedAddress.updatedAt,
+        updatedAt: (updatedAddress as any).updatedAt || new Date(),
       }
     });
   } catch (error: any) {
