@@ -1,11 +1,13 @@
 import { getFirestore } from '../config/firebase';
 import { ethers } from 'ethers';
 
-const db = getFirestore();
+// Lazy initialization of database
+const getDb = () => getFirestore();
 
 // Master Wallet operations
 export const masterWalletService = {
   async create(data: { name: string; metadata?: any }) {
+    const db = getDb();
     const wallet = ethers.Wallet.createRandom();
     const masterWallet = {
       id: wallet.address, // Use address as ID for easy reference
@@ -22,16 +24,19 @@ export const masterWalletService = {
   },
 
   async findById(id: string) {
+    const db = getDb();
     const doc = await db.collection('masterWallets').doc(id).get();
     return doc.exists ? { id: doc.id, ...doc.data() } : null;
   },
 
   async findAll() {
+    const db = getDb();
     const snapshot = await db.collection('masterWallets').get();
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   },
 
   async update(id: string, updates: any) {
+    const db = getDb();
     const updateData = {
       ...updates,
       updatedAt: new Date(),
@@ -41,6 +46,7 @@ export const masterWalletService = {
   },
 
   async delete(id: string) {
+    const db = getDb();
     await db.collection('masterWallets').doc(id).delete();
   },
 };
@@ -55,6 +61,7 @@ export const dedicatedAddressService = {
     enable_gasless_withdraw?: boolean;
     metadata?: any;
   }) {
+    const db = getDb();
     const wallet = ethers.Wallet.createRandom();
     const dedicatedAddress = {
       id: wallet.address,
@@ -76,11 +83,13 @@ export const dedicatedAddressService = {
   },
 
   async findById(id: string) {
+    const db = getDb();
     const doc = await db.collection('dedicatedAddresses').doc(id).get();
     return doc.exists ? { id: doc.id, ...doc.data() } : null;
   },
 
   async findByCustomerId(customer_id: string) {
+    const db = getDb();
     const snapshot = await db
       .collection('dedicatedAddresses')
       .where('customer_id', '==', customer_id)
@@ -89,6 +98,7 @@ export const dedicatedAddressService = {
   },
 
   async findByMasterWalletId(master_wallet_id: string) {
+    const db = getDb();
     const snapshot = await db
       .collection('dedicatedAddresses')
       .where('master_wallet_id', '==', master_wallet_id)
@@ -103,7 +113,8 @@ export const dedicatedAddressService = {
     limit?: number;
     offset?: number;
   } = {}) {
-    let query = db.collection('dedicatedAddresses');
+    const db = getDb();
+    let query: any = db.collection('dedicatedAddresses');
 
     if (filters.customer_id) {
       query = query.where('customer_id', '==', filters.customer_id);
@@ -127,6 +138,7 @@ export const dedicatedAddressService = {
   },
 
   async update(id: string, updates: any) {
+    const db = getDb();
     const updateData = {
       ...updates,
       updatedAt: new Date(),
@@ -136,6 +148,7 @@ export const dedicatedAddressService = {
   },
 
   async delete(id: string) {
+    const db = getDb();
     await db.collection('dedicatedAddresses').doc(id).delete();
   },
 };
@@ -152,6 +165,7 @@ export const transactionService = {
     status: string;
     metadata?: any;
   }) {
+    const db = getDb();
     const transaction = {
       id: data.tx_hash,
       ...data,
@@ -164,11 +178,13 @@ export const transactionService = {
   },
 
   async findByHash(tx_hash: string) {
+    const db = getDb();
     const doc = await db.collection('transactions').doc(tx_hash).get();
     return doc.exists ? { id: doc.id, ...doc.data() } : null;
   },
 
   async findByAddress(address: string, network?: string) {
+    const db = getDb();
     let query = db.collection('transactions');
     
     // Query for transactions where address is either from or to
@@ -182,13 +198,14 @@ export const transactionService = {
 
     // Filter by network if specified
     if (network) {
-      transactions = transactions.filter(tx => tx.network === network);
+      transactions = transactions.filter(tx => tx && 'network' in tx && tx.network === network);
     }
 
     return transactions;
   },
 
   async updateStatus(tx_hash: string, status: string) {
+    const db = getDb();
     await db.collection('transactions').doc(tx_hash).update({
       status,
       updatedAt: new Date(),

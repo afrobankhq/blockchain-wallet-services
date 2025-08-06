@@ -11,8 +11,7 @@ class TokenService {
     initializeProviders() {
         const networks = {
             'base': process.env.BASE_RPC_URL,
-            'base-sepolia': process.env.BASE_TESTNET_RPC_URL,
-            'ethereum-sepolia': process.env.ETHEREUM_SEPOLIA_RPC_URL
+            'base-sepolia': process.env.BASE_TESTNET_RPC_URL
         };
         for (const [network, rpcUrl] of Object.entries(networks)) {
             if (rpcUrl) {

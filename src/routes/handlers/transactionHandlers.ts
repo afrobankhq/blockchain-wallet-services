@@ -23,7 +23,7 @@ export const getTransactionHistory = async (req: Request, res: Response) => {
     
     // Filter by token if specified
     const filteredTransactions = token_symbol 
-      ? transactions.filter(tx => tx.token_symbol === token_symbol)
+      ? transactions.filter(tx => tx && 'token_symbol' in tx && tx.token_symbol === token_symbol)
       : transactions;
     
     res.json({ 
